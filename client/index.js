@@ -1,4 +1,3 @@
-const url_input = document.querySelector("input#url")
 const send_url_button = document.querySelector('#send') 
 const root_container = document.querySelector('.container')
 
@@ -16,10 +15,13 @@ function newEl(type, attrs={}) {
 
 function checkInput(tag_input) {
     if (tag_input != null && tag_input != '') {
-        console.log(tag_input)
+        const output = tag_input
         tag_input = ''
+        return output
+
     } else {
         alert('Campos Inválidos ou Vazíos, digíte novamente!')
+        return
     }
 }
 
@@ -42,8 +44,18 @@ async function loadContent() {
 
 function main(){
     send_url_button.addEventListener('click', () => {
+        const url_input = document.querySelector("input#url").value
         // Send to server
-        checkInput(url_input.value)
+        if (checkInput(url_input)){
+            const url_output = checkInput(url_input)
+            fetch('http://localhost:3333/games', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'Application/json'
+                },
+                body: JSON.stringify({url_output})
+            })
+        }
     })
 
     loadContent()
