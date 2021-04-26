@@ -7,11 +7,11 @@
 
 .container {
     display: flex;
-    background: yellow;
+    /* background: yellow; */
 }
 
 .card {
     margin: 20px;
     padding: 20px;
-    background: blue;
+    /* background: blue; */
 }
