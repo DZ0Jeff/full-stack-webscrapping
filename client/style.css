@@ -1,0 +1,17 @@
+* {
+    outline: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    background: yellow;
+}
+
+.card {
+    margin: 20px;
+    padding: 20px;
+    background: blue;
+}
