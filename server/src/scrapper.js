@@ -15,24 +15,19 @@ async function scrapperGames(url){
 
     console.log('Página carregada!');
 
-    const [container] = await page.$("#post-body-2794561203943297067 > div:nth-child(4) a")
-    console.log(container)
-    // await page.evaluate(() => {
-    //     console.log('Buscando conteúdo...');
-    //     const nodeLinks = document.querySelectorAll("#post-body-2794561203943297067 > div:nth-child(4) a")
+    const container = await page.$$("#post-body-2794561203943297067 > div:nth-child(4) a")
+    
+    let page_links = []
+    for (let link of container) {
+        const raw_href = await link.getProperty('href')
+        const href = await raw_href.jsonValue() 
+        page_links.push(href)
+    }
 
-    //     const raw_links = [...nodeLinks]
-
-    //     const links = raw_links.map(link => ({ name: link.text, url: link.href }))
-
-    //     console.log(links)
-
-    //     return links
-    // })
+    const links = await page_links
+    console.log(links)
 
     await browser.close();
-
-    // console.log(gameLinks)
 } 
 
 scrapperGames('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
