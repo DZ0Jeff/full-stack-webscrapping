@@ -11,14 +11,19 @@ async function scrapperPageGames(url){
     await page.setDefaultNavigationTimeout(0);
     await page.goto(url)
 
-    const imgElement = await page.$x('//*[@id="post-body-8073520245951902812"]/div[1]/a/img')
+    const titleEl = await page.$('h3')
+    const raw_title = await titleEl.getProperty('textContent')
+    const title = await raw_title.jsonValue()
+
+    const imgElement = await page.$('#post-body-8073520245951902812 > div:nth-child(1) > a > img')
     const img = await imgElement.getProperty('src')
     const src = await img.jsonValue()
 
-    const torrentElement = await page.$x('//*[@id="post-body-8073520245951902812"]/div[3]/a')
+    const torrentElement = await page.$("#post-body-8073520245951902812 > div:nth-child(3) > a")
     const torrent = await torrentElement.getProperty('href')
     const torrentLink = await torrent.jsonValue()
 
+    console.log(title)
     console.log(src)
     console.log(torrentLink)
 
