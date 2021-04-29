@@ -7,10 +7,12 @@ async function launchPuppeter(url) {
         args: ['--no-sandbox', "--disable-notifications"]
     }
 
+    console.log(`Lançando browser...`)
     const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);
     await page.goto(url)
+    console.log(`Browser aberto!`)
 
     return { browser, page }
 }
@@ -95,6 +97,7 @@ async function scrapperGamesList(url){
 } 
 
 async function scrapperGames() {
+    console.log('Iniciando scrapper...')
     const raw_links = await scrapperGamesList('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
 
     const links = raw_links.slice(0, 5)

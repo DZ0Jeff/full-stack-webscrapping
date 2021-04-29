@@ -1,6 +1,6 @@
 const express = require('express')
-// const puppetter = require('puppeteer')
 const cors = require('cors')
+const scrapper = require('./scrapper')
 
 const PORT = process.env.PORT || 3333
 const server = express()
@@ -27,6 +27,8 @@ server.get('/games', async (request, response) => {
 server.post('/games', async (request, response) => {
     console.log(request.body)
     // tudo: Scrappe games
+    const gameData = await scrapper.scrapperGames()
+    console.log(gameData)
     // tado: add to DB
     return response.json({ status: "success" })
 })
