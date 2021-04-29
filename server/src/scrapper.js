@@ -71,7 +71,7 @@ async function scrapperPageGames(url){
 }
 
 
-async function scrapperGames(url){
+async function scrapperGamesList(url){
     const { browser, page } = await launchPuppeter(url)
 
     console.log('Página carregada!');
@@ -94,8 +94,8 @@ async function scrapperGames(url){
     return links
 } 
 
-async function main() {
-    const raw_links = await scrapperGames('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
+async function scrapperGames() {
+    const raw_links = await scrapperGamesList('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
 
     const links = raw_links.slice(0, 5)
 
@@ -109,5 +109,6 @@ async function main() {
     }
 }
 
-main()
-// scrapperPageGames('https://imperiotorrentgames.blogspot.com/2019/04/baixar-007-quantum-of-solace-xbox-360.html')
+module.exports = {
+    scrapperGames
+}
