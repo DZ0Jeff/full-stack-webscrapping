@@ -1,48 +1,63 @@
 const puppeteer = require('puppeteer');
 
 
-async function scrapperPageGames(url){
+async function launchPuppeter(url) {
     const options = { 
         // headless: false,
         args: ['--no-sandbox', "--disable-notifications"]
     }
+
+    console.log('Abrindo chrome...')
     const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);
     await page.goto(url)
+    console.log('Chrome aberto!')
 
-    const titleEl = await page.$('h3')
-    const raw_title = await titleEl.getProperty('textContent')
-    const title = await raw_title.jsonValue()
+    return { browser, page }
+}
 
-    const imgElement = await page.$('#post-body-8073520245951902812 > div:nth-child(1) > a > img')
-    const img = await imgElement.getProperty('src')
-    const src = await img.jsonValue()
 
-    const torrentElement = await page.$("#post-body-8073520245951902812 > div:nth-child(3) > a")
-    const torrent = await torrentElement.getProperty('href')
-    const torrentLink = await torrent.jsonValue()
+async function scrapperPageGames(url){
+    async function getTagData(tag, prop){
+        const raw_data = await tag.getProperty(prop)
+        const tagData = await raw_data.jsonValue()
+        return tagData
+    }
+    
+    try {
+        const { browser, page } = await launchPuppeter(url)
 
-    console.log(title)
-    console.log(src)
-    console.log(torrentLink)
+        const titleEl = await page.$('h3')
+        const raw_title = await getTagData(titleEl, 'textContent')
+        const title = raw_title.trim()
 
-    await browser.close()
+        const imgElement = await page.$('#post-body-8073520245951902812 > div:nth-child(1) > a > img')
+        const src = await getTagData(imgElement, 'src')
+
+        const torrentElement = await page.$("#post-body-8073520245951902812 > div:nth-child(3) > a")
+        const torrentLink = await getTagData(torrentElement ,'href')
+
+        await browser.close()
+
+        console.log(title.trim())
+        console.log(src)
+        console.log(torrentLink)
+
+        return {
+            title,
+            src,
+            torrentLink
+        }
+    } catch(e) {
+        console.error(`[ERRO]: ${e}`)
+    }
+    
 }
 
 
 async function scrapperGames(url){
-    const options = { 
-        // headless: false,
-        args: ['--no-sandbox', "--disable-notifications"]
-    }
-
-    console.log('Iniciando extração...')
-    const browser = await puppeteer.launch(options);
-    const page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(0);
-    console.log(`Abrindo página ${url}`)
-    await page.goto(url);
+    const { browser, page } = await launchPuppeter(url)
 
     console.log('Página carregada!');
 
@@ -56,20 +71,24 @@ async function scrapperGames(url){
     }
 
     const links = await page_links
-    console.log(links)
-
     await browser.close();
+    return links
 } 
 
-// scrapperGames('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
-scrapperPageGames('https://imperiotorrentgames.blogspot.com/2019/04/baixar-007-quantum-of-solace-xbox-360.html')
+async function main() {
+    const links = await scrapperGames('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
+    
+    console.log(`${links.length} Pagínas a serem extraídas...`)
+    
+    let count
+    for(let link of links){
+        console.log(`Extraindo ${link} página`)
+        await scrapperPageGames(link)
+        count++
 
-// (async () => {
-//     console.log('Iniciando...')    
-//     const browser = await puppeteer.launch();
-//     const page = await browser.newPage();
-//     await page.goto('https://example.com');
-//     await page.screenshot({ path: 'example.png' });
+        if(count > 10) break
+    }
+}
 
-//     await browser.close();
-// })();
+main()
+// scrapperPageGames('https://imperiotorrentgames.blogspot.com/2019/04/baixar-007-quantum-of-solace-xbox-360.html')
