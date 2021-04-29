@@ -7,12 +7,10 @@ async function launchPuppeter(url) {
         args: ['--no-sandbox', "--disable-notifications"]
     }
 
-    console.log('Abrindo chrome...')
     const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);
     await page.goto(url)
-    console.log('Chrome aberto!')
 
     return { browser, page }
 }
@@ -25,34 +23,51 @@ async function scrapperPageGames(url){
         return tagData
     }
     
-    try {
-        const { browser, page } = await launchPuppeter(url)
+    
+    const { browser, page } = await launchPuppeter(url)
 
+    let title
+    try {
         const titleEl = await page.$('h3')
         const raw_title = await getTagData(titleEl, 'textContent')
-        const title = raw_title.trim()
-
-        const imgElement = await page.$('#post-body-8073520245951902812 > div:nth-child(1) > a > img')
-        const src = await getTagData(imgElement, 'src')
-
-        const torrentElement = await page.$("#post-body-8073520245951902812 > div:nth-child(3) > a")
-        const torrentLink = await getTagData(torrentElement ,'href')
-
-        await browser.close()
-
-        console.log(title.trim())
-        console.log(src)
-        console.log(torrentLink)
-
-        return {
-            title,
-            src,
-            torrentLink
-        }
+        title = raw_title.trim()    
     } catch(e) {
-        console.error(`[ERRO]: ${e}`)
+        // console.error(`[ERRO] ${e}`)
+        title = "Título localizado..."
     }
     
+    let src
+    try {
+        const imgElement = await page.$('.post-body.entry-content > div:nth-child(1) > a > img')
+        src = await getTagData(imgElement, 'src')
+    } catch(e){
+        // console.error(`[ERRO] ${e}`)
+        src = "Imagem não localizada!"
+    }
+
+    let torrentLink
+    try {
+        const torrentElement = await page.$(".post-body.entry-content > div:nth-child(3) > a")
+        torrentLink = await getTagData(torrentElement ,'href')
+    } catch(e) {
+        // console.error(`[ERRO] ${e}`)
+        torrentLink = 'Link do torrent não localizado!'
+    }
+    
+
+    let pages = await browser.pages();
+    await Promise.all(pages.map(page =>page.close()));
+    await browser.close()
+
+    console.log(title.trim())
+    console.log(src)
+    console.log(torrentLink)
+
+    return {
+        title,
+        src,
+        torrentLink
+    }
 }
 
 
@@ -71,22 +86,26 @@ async function scrapperGames(url){
     }
 
     const links = await page_links
+    
+    let pages = await browser.pages();
+    await Promise.all(pages.map(page =>page.close()))
     await browser.close();
+    
     return links
 } 
 
 async function main() {
-    const links = await scrapperGames('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
-    
+    const raw_links = await scrapperGames('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
+
+    const links = raw_links.slice(0, 5)
+
     console.log(`${links.length} Pagínas a serem extraídas...`)
     
-    let count
+    let count = 0
     for(let link of links){
-        console.log(`Extraindo ${link} página`)
+        console.log(`Extraindo ${count + 1} página`)
         await scrapperPageGames(link)
         count++
-
-        if(count > 10) break
     }
 }
 
