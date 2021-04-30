@@ -31,12 +31,16 @@ async function loadContent() {
 
     const games = await response.json()
 
+    console.log(games)
+
     games.forEach(game => {
-        const card = newEl('div', { class: 'card' })
-        const title = newEl('h4', { innerText: game.name})
-        const img = newEl('img', { src: game.img })
+        const card = newEl('a', { href: game.torrentLink, class: 'card' })
+        const title = newEl('h4', { innerText: game.title})
+        const img = newEl('img', { src: game.src })
+
         card.appendChild(title)
         card.appendChild(img)
+
         root_container.appendChild(card)
     })
 }

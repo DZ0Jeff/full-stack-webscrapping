@@ -16,13 +16,10 @@ server.use((request, response, next) => {
 })
 
 server.get('/games', async (request, response) => {
-    const creators = [
-        {name:"MxJeff", img: "https://"},
-        {name:"Bearyder", img: "https://"},
-        {name:"addtesfield", img: "https://"}
-    ]
-
     // get DB
+    // get JSON
+    const creators = await files.loadFile()
+
     return response.json(creators)
 })
 
@@ -33,7 +30,7 @@ server.post('/games', async (request, response) => {
     console.log(gameData)
     // tado: add to DB
     // todo:add to json
-    files.handleFile(gameData)
+    files.saveFile(gameData)
 
 
     return response.json({ status: "success" })

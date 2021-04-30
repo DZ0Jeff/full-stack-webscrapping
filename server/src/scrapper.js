@@ -102,17 +102,15 @@ async function scrapperGames() {
     console.log('Iniciando scrapper...')
     const raw_links = await scrapperGamesList('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
 
-    const links = raw_links.slice(0, 10)
+    const links = raw_links.slice(0, 25)
 
     console.log(`${links.length} Pagínas a serem extraídas...`)
     
-    let count = 0
     let results = []
     for(let link of links){
-        console.log(`Extraindo ${count + 1} página`)
+        console.log(`Extraindo página`)
         const details = await scrapperPageGames(link)
         results.push(details)
-        count++
     }
 
     return results
