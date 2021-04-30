@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
+
 const scrapper = require('./scrapper')
+const files = require('./handleFile')
 
 const PORT = process.env.PORT || 3333
 const server = express()
@@ -26,10 +28,14 @@ server.get('/games', async (request, response) => {
 
 server.post('/games', async (request, response) => {
     console.log(request.body)
-    // tudo: Scrappe games
+    // todo: Scrappe games
     const gameData = await scrapper.scrapperGames()
     console.log(gameData)
     // tado: add to DB
+    // todo:add to json
+    files.handleFile(gameData)
+
+
     return response.json({ status: "success" })
 })
 

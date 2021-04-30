@@ -19,6 +19,7 @@ async function launchPuppeter(url) {
 
 
 async function scrapperPageGames(url){
+    
     async function getTagData(tag, prop){
         const raw_data = await tag.getProperty(prop)
         const tagData = await raw_data.jsonValue()
@@ -96,11 +97,12 @@ async function scrapperGamesList(url){
     return links
 } 
 
+
 async function scrapperGames() {
     console.log('Iniciando scrapper...')
     const raw_links = await scrapperGamesList('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
 
-    const links = raw_links.slice(0, 5)
+    const links = raw_links.slice(0, 10)
 
     console.log(`${links.length} Pagínas a serem extraídas...`)
     
@@ -113,7 +115,6 @@ async function scrapperGames() {
         count++
     }
 
-    console.log(results)
     return results
 }
 
