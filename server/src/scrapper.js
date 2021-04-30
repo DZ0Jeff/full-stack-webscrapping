@@ -61,9 +61,9 @@ async function scrapperPageGames(url){
     await Promise.all(pages.map(page =>page.close()));
     await browser.close()
 
-    console.log(title.trim())
-    console.log(src)
-    console.log(torrentLink)
+    // console.log(title.trim())
+    // console.log(src)
+    // console.log(torrentLink)
 
     return {
         title,
@@ -105,11 +105,16 @@ async function scrapperGames() {
     console.log(`${links.length} Pagínas a serem extraídas...`)
     
     let count = 0
+    let results = []
     for(let link of links){
         console.log(`Extraindo ${count + 1} página`)
-        await scrapperPageGames(link)
+        const details = await scrapperPageGames(link)
+        results.push(details)
         count++
     }
+
+    console.log(results)
+    return results
 }
 
 module.exports = {
