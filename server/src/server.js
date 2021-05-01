@@ -27,11 +27,9 @@ server.post('/games', async (request, response) => {
     console.log(request.body)
     // todo: Scrappe games
     const gameData = await scrapper.scrapperGames()
-    console.log(gameData)
     // tado: add to DB
     // todo:add to json
     files.saveFile(gameData)
-
 
     return response.json({ status: "success" })
 })
