@@ -6,7 +6,13 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.header {
+:root {
+    --transparent: 1px solid transparent;
+    --base-shadow: -1px 1px 8px 0px rgb(193 193 193 / 75%); 
+    --hover-shadow: -1px 3px 26px 0px rgba(0,0,0,0.75);
+}
+
+header {
     width: 100%;
     height: 150px;
     display: flex;
@@ -14,8 +20,36 @@
     align-items: center;
 }
 
-.header input {
+header input {
     width: 25vw;
+    padding: .3rem .5rem;
+    border-radius: 5px;
+    border: var(--transparent);
+    box-shadow: var(--base-shadow);
+}
+
+header input:focus {
+    box-shadow: var(--hover-shadow);
+}
+
+header button {
+    border: var(--transparent);
+    padding: .3rem .5rem;
+    background: #dedede;
+    border-radius: 5px;
+    box-shadow: var(--base-shadow);
+    cursor: pointer;
+}
+
+header button:hover {
+    background: #5d5c5c;
+    color: white;
+    box-shadow: var(--hover-shadow);
+}
+
+header h4 {
+    font-size: larger;
+    margin-bottom: .3rem;
 }
 
 .container {
@@ -23,28 +57,59 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
+@media(max-width: 769px){
+    .container {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }   
+
+    header {
+        width: 100%;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .form-control {
+        width: 75%;
+        text-align: center;
+    }
+
+    .form-control h4 {
+        margin-bottom: 1rem;
+    }
+
+    .form-control input[type=text] {
+        width: 75%;
+    }
+}
+
 .card {
     width: 50%;
-    margin: 20px auto;
-    padding: 20px;
+    margin: 40px auto;
     color: black;
     text-decoration: none;
     display: flex;
     flex-direction: column-reverse;
     justify-content: center;
     align-content: center;
+    box-shadow: var(--base-shadow);
+    transition: box-shadow .3s;
 }
 
 .card h4 {
-    margin-top: .3rem;
     font-weight: 500;
+    padding: 5px;
 }
 
 .card:hover {
     text-decoration: underline;
+    box-shadow: var(--hover-shadow);
 }
 
 .card img {
-    width: 160px;
-    height: 225px;
+    width: auto;
+    height: 290px;
 }
