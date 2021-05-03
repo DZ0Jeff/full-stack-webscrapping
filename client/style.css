@@ -93,7 +93,7 @@ header h4 {
     text-decoration: none;
     display: flex;
     flex-direction: column-reverse;
-    justify-content: center;
+    justify-content: space-between;
     align-content: center;
     box-shadow: var(--base-shadow);
     transition: box-shadow .3s;
