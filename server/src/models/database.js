@@ -58,7 +58,7 @@ async function insertGames(title, src, torrentLink){
     games.torrentLink
 
     // Save
-    const gamesRepo = connection.createRepo(Games)
+    const gamesRepo = connection.createRepository(Games)
     const response = gamesRepo.save(games)
     console.log('Saved', response)
 

@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 async function launchPuppeter(url) {
     const options = { 
         // headless: false,
-        args: ['--no-sandbox', "--disable-notifications"]
+        args: ['--no-sandbox', "--disable-dev-shm-usage","--disable-notifications"]
     }
 
     console.log(`Lançando browser...`)
@@ -117,5 +117,6 @@ async function scrapperGames() {
 }
 
 module.exports = {
-    scrapperGames
+    scrapperGames,
+    scrapperPageGames
 }
