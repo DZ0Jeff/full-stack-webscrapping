@@ -3,6 +3,7 @@ const cors = require('cors')
 
 const scrapper = require('./scrapper')
 const files = require('./handleFile')
+const db = require('./models/database')
 
 const PORT = process.env.PORT || 3333
 const server = express()
@@ -17,10 +18,11 @@ server.use((request, response, next) => {
 
 server.get('/games', async (request, response) => {
     // get DB
+    const games = await db.getAllGames()
     // get JSON
-    const creators = await files.loadFile()
+    // const games = await files.loadFile()
 
-    return response.json(creators)
+    return response.json(games)
 })
 
 server.post('/games', async (request, response) => {
@@ -28,10 +30,11 @@ server.post('/games', async (request, response) => {
     // todo: Scrappe games
     const gameData = await scrapper.scrapperGames()
     // tado: add to DB
+    const games = await db.insertGames(gameData.title, gameData.src, gameData.torrentLink)
     // todo:add to json
-    files.saveFile(gameData)
+    // files.saveFile(gameData)
 
-    return response.json({ status: "success" })
+    return response.json(games)
 })
 
 server.listen(PORT, () => console.log(`Server Running in port ${PORT}`))
