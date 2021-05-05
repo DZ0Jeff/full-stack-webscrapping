@@ -4,7 +4,15 @@ const puppeteer = require('puppeteer');
 async function launchPuppeter(url) {
     const options = { 
         // headless: false,
-        args: ['--no-sandbox', "--disable-dev-shm-usage","--disable-notifications"]
+        args: [
+            '--ignore-certificate-errors',
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-accelerated-2d-canvas',
+            '--disable-gpu', 
+            "--disable-dev-shm-usage",
+            "--disable-notifications"
+        ]
     }
 
     console.log(`Lançando browser...`)

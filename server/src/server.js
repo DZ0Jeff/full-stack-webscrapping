@@ -16,15 +16,6 @@ server.use((request, response, next) => {
     next();
 })
 
-server.get('/games', async (request, response) => {
-    // get DB
-    // const games = await db.getAllGames()
-    // get JSON
-    const games = await files.loadFile()
-
-    return response.json(games)
-})
-
 server.get('/allGames', async (request, response) => {
     // Scrape all games and save to DB
     const gameData = await scrapper.scrapperGames()
@@ -32,11 +23,19 @@ server.get('/allGames', async (request, response) => {
     return response.json(games)
 })
 
+server.get('/games', async (request, response) => {
+    // get DB
+    const games = await db.getAllGames()
+    // get JSON
+    // const games = await files.loadFile()
+
+    return response.json(games)
+})
+
 server.post('/games', async (request, response) => {
     const { url_output } = request.body
-    console.log(url_output)
     // todo: Scrappe games
-    const gameData = await scrapper.scrapperPageGames( url_output )
+    const gameData = await scrapper.scrapperPageGames(url_output)
     console.log(gameData)
     // tado: add to DB
     const games = await db.insertGames(gameData.title, gameData.src, gameData.torrentLink)

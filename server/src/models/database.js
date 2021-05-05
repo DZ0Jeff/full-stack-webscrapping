@@ -1,6 +1,7 @@
 const typeorm = require('typeorm')
 const EntitySchema = require('typeorm').EntitySchema
 
+
 class Games {
     constructor(id, title, src, torrentLink){
         this.id = id
@@ -36,6 +37,7 @@ async function getConnection(){
         type: 'sqlite',
         database: './src/data/games.sqlite',
         logging: false,
+        synchronize: true,
         entities: [ GameSchema ]
     })
 }
@@ -43,7 +45,7 @@ async function getConnection(){
 async function getAllGames(){
     const connection = await getConnection() 
     const gamesRepo = connection.getRepository(Games)
-    const games = gamesRepo.find()
+    const games = await gamesRepo.find()
     connection.close()
     return games
 }
@@ -55,11 +57,13 @@ async function insertGames(title, src, torrentLink){
     const games = new Games()
     games.title = title
     games.src = src
-    games.torrentLink
+    games.torrentLink = torrentLink
+
+    console.log(games)
 
     // Save
-    const gamesRepo = connection.createRepository(Games)
-    const response = gamesRepo.save(games)
+    const gamesRepo = connection.getRepository(Games)
+    const response = await gamesRepo.save(games)
     console.log('Saved', response)
 
     // return a list
