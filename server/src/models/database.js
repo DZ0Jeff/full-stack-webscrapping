@@ -34,8 +34,9 @@ const GameSchema = new EntitySchema({
 
 async function getConnection(){
     return await typeorm.createConnection({
-        type: 'sqlite',
-        database: './src/data/games.sqlite',
+        name: 'default',
+        type: 'postgres',
+        url: 'postgres://lovtfnko:mNygsOS_dwhxVTHG7-hLhjx8_WW-mY_c@tuffi.db.elephantsql.com:5432/lovtfnko',
         logging: false,
         synchronize: true,
         entities: [ GameSchema ]
@@ -58,8 +59,6 @@ async function insertGames(title, src, torrentLink){
     games.title = title
     games.src = src
     games.torrentLink = torrentLink
-
-    console.log(games)
 
     // Save
     const gamesRepo = connection.getRepository(Games)

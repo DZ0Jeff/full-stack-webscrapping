@@ -36,7 +36,6 @@ server.post('/games', async (request, response) => {
     const { url_output } = request.body
     // todo: Scrappe games
     const gameData = await scrapper.scrapperPageGames(url_output)
-    console.log(gameData)
     // tado: add to DB
     const games = await db.insertGames(gameData.title, gameData.src, gameData.torrentLink)
     // todo:add to json
