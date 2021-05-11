@@ -1,6 +1,14 @@
 const send_url_button = document.querySelector('#send') 
 const root_container = document.querySelector('.container')
 
+const dev = false
+let base_path = "http://localhost:3333"
+if(!dev) {
+    base_path = "https://game-scrapper.herokuapp.com/"
+} 
+
+console.log(base_path)
+
 
 function newEl(type, attrs={}) {
     const el = document.createElement(type);
@@ -27,7 +35,7 @@ function checkInput(tag_input) {
 
 
 async function loadContent() {
-    const response = await fetch('http://localhost:3333/games')
+    const response = await fetch(`${base_path}games`)
 
     const games = await response.json()
 
@@ -52,7 +60,7 @@ function main(){
         // Send to server
         if (checkInput(url_input)){
             const url_output = checkInput(url_input)
-            fetch('http://localhost:3333/games', {
+            fetch(`${base_path}games`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'Application/json'
