@@ -16,11 +16,19 @@ server.use((request, response, next) => {
     next();
 })
 
+server.get('/', (req, res) => {
+    return response.json({ status: 'ACK!' })
+})
+
 server.get('/allGames', async (request, response) => {
     // Scrape all games and save to DB
     const gameData = await scrapper.scrapperGames()
-    const games = await db.insertGames(gameData.title, gameData.src, gameData.torrentLink) 
-    return response.json(games)
+    // console.log(gameData)
+    for(let game of gameData){
+        await db.insertGames(game.title, game.src, game.torrentLink)     
+    }
+    
+    return response.json({status: 'ACK!'})
 })
 
 server.get('/games', async (request, response) => {

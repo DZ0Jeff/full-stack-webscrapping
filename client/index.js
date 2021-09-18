@@ -10,6 +10,13 @@ if(!dev) {
 console.log(base_path)
 
 
+async function init(){
+    root_container.innerHTML = 'Aguarde...'
+    const response = await fetch(base_path)
+    if (response.status != 200) root_container.innerText = "Um erro ocorreu! Contate o adminsitrador"
+}
+
+
 function newEl(type, attrs={}) {
     const el = document.createElement(type);
     for (let attr in attrs) {

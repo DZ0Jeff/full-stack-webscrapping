@@ -67,7 +67,7 @@ async function insertGames(title, src, torrentLink){
 
     // return a list
     const allGames = await gamesRepo.find()
-    connection.close()
+    await connection.close()
     return allGames
 }
 

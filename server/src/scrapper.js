@@ -37,31 +37,34 @@ async function scrapperPageGames(url){
     
     const { browser, page } = await launchPuppeter(url)
 
-    let title
+    let title = ""
     try {
         const titleEl = await page.$('h3')
         const raw_title = await getTagData(titleEl, 'textContent')
         title = raw_title.trim()    
     } catch(e) {
         // console.error(`[ERRO] ${e}`)
+        console.log('Titulo não localizada :(')
         title = "Título localizado..."
     }
     
-    let src
+    let src = ""
     try {
         const imgElement = await page.$('.post-body.entry-content > div:nth-child(1) > a > img')
         src = await getTagData(imgElement, 'src')
     } catch(e){
         // console.error(`[ERRO] ${e}`)
+        console.log('Imagem não localizada :(')
         src = "Imagem não localizada!"
     }
 
-    let torrentLink
+    let torrentLink = ""
     try {
         const torrentElement = await page.$(".post-body.entry-content > div:nth-child(3) > a")
         torrentLink = await getTagData(torrentElement ,'href')
     } catch(e) {
         // console.error(`[ERRO] ${e}`)
+        console.log('Link do torrent não localizado :(')
         torrentLink = 'Link do torrent não localizado!'
     }
     
@@ -69,10 +72,6 @@ async function scrapperPageGames(url){
     let pages = await browser.pages();
     await Promise.all(pages.map(page =>page.close()));
     await browser.close()
-
-    // console.log(title.trim())
-    // console.log(src)
-    // console.log(torrentLink)
 
     return {
         title,
@@ -110,7 +109,7 @@ async function scrapperGames() {
     console.log('Iniciando scrapper...')
     const raw_links = await scrapperGamesList('http://imperiotorrentgames.blogspot.com/p/jogos-de-xbo.html')
 
-    const links = raw_links.slice(0, 25)
+    const links = raw_links.slice(0, 5)
 
     console.log(`${links.length} Pagínas a serem extraídas...`)
     
