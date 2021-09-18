@@ -17,7 +17,7 @@ server.use((request, response, next) => {
 })
 
 server.get('/', (req, res) => {
-    return response.json({ status: 'ACK!' })
+    return res.json({ status: 'ACK!' })
 })
 
 server.get('/allGames', async (request, response) => {
