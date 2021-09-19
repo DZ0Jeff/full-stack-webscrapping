@@ -11,9 +11,10 @@ console.log(base_path)
 
 
 async function init(){
-    root_container.innerHTML = 'Aguarde...'
+    root_container.innerHTML = '<div class="load">Aguarde...</div>'
     const response = await fetch(base_path)
     if (response.status != 200) root_container.innerText = "Um erro ocorreu! Contate o adminsitrador"
+    root_container.innerHTML = ''
 }
 
 
@@ -62,6 +63,8 @@ async function loadContent() {
 
 
 function main(){
+    init()
+
     send_url_button.addEventListener('click', () => {
         const url_input = document.querySelector("input#url").value
         // Send to server

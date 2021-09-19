@@ -113,3 +113,14 @@ header h4 {
     width: auto;
     height: 290px;
 }
+
+.load {
+    width: 50%;
+    margin: 40px auto;
+    color: black;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    align-content: center;
+}
